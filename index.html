@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Service Word Filter - Free Chrome Extension</title>
+    <meta name="description" content="Keep your streaming experience clean and family-friendly with our free Chrome extension for Netflix, Disney+, and Amazon Prime Video.">
+    <meta name="keywords" content="Chrome extension, word filter, Netflix filter, Disney Plus filter, Amazon Prime filter, family friendly, parental controls">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Streaming Service Word Filter">
+    <meta property="og:description" content="Free Chrome extension that filters inappropriate words from streaming services">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/streaming-word-filter">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .free-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+            background: #f8fafc;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2d3748;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        /* Platforms Section */
+        .platforms {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .platforms h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2d3748;
+        }
+
+        .platform-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-logo {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+            background: #f8fafc;
+            border-radius: 15px;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+
+        .platform-logo:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* How it Works */
+        .how-it-works {
+            padding: 4rem 0;
+            background: #f8fafc;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2d3748;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            line-height: 60px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        /* Support Section */
+        .support {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .support h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .support p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .support-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .support-btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .patreon {
+            background: #ff424d;
+            color: white;
+        }
+
+        .paypal {
+            background: #0070ba;
+            color: white;
+        }
+
+        .support-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .platform-logos {
+                gap: 1rem;
+            }
+
+            .platform-logo {
+                font-size: 1.5rem;
+                padding: 0.8rem 1.5rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <div class="logo">🎬</div>
+                <h1>Streaming Service Word Filter</h1>
+                <p class="subtitle">Keep your streaming experience clean and family-friendly with our free Chrome extension for Netflix, Disney+, and Amazon Prime Video.</p>
+                
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" id="install-btn">
+                        📥 Install Extension
+                    </a>
+                    <a href="https://github.com/yourusername/streaming-word-filter" class="btn btn-secondary">
+                        📚 View on GitHub
+                    </a>
+                </div>
+                
+                <div class="free-badge">
+                    ✨ 100% Free Forever
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="fade-in">Why Choose Our Extension?</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Filtering</h3>
+                    <p>Automatically detects inappropriate words in closed captions and instantly mutes audio with visual overlay.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Fully Customizable</h3>
+                    <p>Add your own words, adjust colors, opacity, and duration. Complete control over your viewing experience.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Privacy First</h3>
+                    <p>All filtering happens locally on your device. No data collection, no external servers, complete privacy.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                    <h3>Family Friendly</h3>
+                    <p>Perfect for family movie nights and creating a comfortable viewing environment for everyone.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Easy Toggle</h3>
+                    <p>Enable or disable the filter anytime with a simple click. No need to uninstall or restart.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Lightweight</h3>
+                    <p>Minimal impact on performance. Won't slow down your streaming or browsing experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="platforms">
+        <div class="container">
+            <h2 class="fade-in">Supported Platforms</h2>
+            <div class="platform-logos fade-in">
+                <div class="platform-logo">Netflix</div>
+                <div class="platform-logo">Disney+</div>
+                <div class="platform-logo">Prime Video</div>
+                <div class="platform-logo">More Coming Soon</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="fade-in">How It Works</h2>
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Install Extension</h3>
+                    <p>One-click installation from Chrome Web Store</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>Add Your Words</h3>
+                    <p>Create a custom list of words you want to filter</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Customize Settings</h3>
+                    <p>Adjust colors, opacity, and duration to your preference</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">4</div>
+                    <h3>Enjoy Clean Content</h3>
+                    <p>The extension works automatically in the background</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="support">
+        <div class="container">
+            <h2>Support Development</h2>
+            <p>This extension is completely free and will always remain free. If you find it useful and want to support continued development, consider making a donation:</p>
+            <div class="support-buttons">
+                <a href="https://patreon.com/HermanMyburgh" class="support-btn patreon" target="_blank" rel="noopener noreferrer">
+                    💝 Support on Patreon
+                </a>
+                <a href="https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-04Y62281CE859115PNBA4KSI" class="support-btn paypal" target="_blank" rel="noopener noreferrer">
+                    💳 Donate via PayPal
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/yourusername/streaming-word-filter">GitHub Repository</a>
+                <a href="https://github.com/yourusername/streaming-word-filter/issues">Report Issues</a>
+                <a href="https://github.com/yourusername/streaming-word-filter/blob/main/LICENSE">License</a>
+                <a href="mailto:your.email@example.com">Contact</a>
+            </div>
+            <p>&copy; 2025 Herman Myburgh. Licensed under MIT License.</p>
+            <p>Made with ❤️ for families and content-conscious viewers</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+
+            // Update install button when Chrome Web Store link is available
+            const installBtn = document.getElementById('install-btn');
+            // Replace with actual Chrome Web Store URL when published
+            // installBtn.href = 'https://chrome.google.com/webstore/detail/your-extension-id';
+            
+            // For now, redirect to GitHub releases
+            installBtn.href = 'https://github.com/yourusername/streaming-word-filter/releases';
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
